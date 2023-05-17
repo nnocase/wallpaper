@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<title>泡泡屏保</title>
+<link rel="icon" href="ch2.png" />
+<style>
+    html, body{
+        border: none;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    body {
+        background: url(win10.jpg);
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+</style>
+</head>
+
+<body onload="Demo()">
+<script src="Bubbles.js"></script>
+<script>
+var MAX = 10;
+var i = 0;
+
+function Demo(){
+	CreateBubble();
+
+	if(++i < MAX)
+		setTimeout(Demo, 1000);
+}
+</script>
+</body>
+</html>

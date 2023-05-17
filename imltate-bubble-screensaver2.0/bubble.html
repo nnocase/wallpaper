@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泡泡屏保</title>
+    <link rel="icon" href="ch2.png" />
+    <style>
+        html, body{
+            border: none;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        body {
+            /* background: url(https://images.unsplash.com/photo-1532517891316-72a08e5c03a7); */
+            /* background: url(https://source.unsplash.com/random/1920x1080); */
+            background: url(win10.jpg);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+ 
+        span {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            border-radius: 50%;
+            border-style: solid;
+            border-width: 1px;
+            position: absolute;
+            opacity: 0.5;
+            background-image: url(heart.png);
+            cursor: pointer;
+        }
+    </style>
+</head>
+ 
+<body>
+ 
+</body>
+ 
+</html>
+<script>
+    //将创建一个泡泡封装成一个函数
+    function Bubble(n) {
+        //创建传入的实参n个的泡泡
+        for (let i = 0; i < n; i++) {
+            let oBB = document.createElement("span");
+            document.body.appendChild(oBB);
+        }
+        let oBBs = document.querySelectorAll("span");
+        for (let i = 0; i < n; i++) {
+            // let num = Math.round(Math.random() * 80 + 30);  //泡泡的随机宽高
+            let num = 222;  //泡泡的固定宽高
+            let num2 = Math.round(Math.random() * 700 + 80); //泡泡距离浏览器页面左上角的随机top
+            let num3 = Math.round(Math.random() * 1000 + 80); //泡泡距离浏览器页面左上角的随机left
+            let num4 = Math.round(Math.random() * 5 + 1); //泡泡的随机速度speedX
+            let num5 = Math.round(Math.random() * 5 + 1); //泡泡的随机速度speedY
+            //随机颜色
+            let color = "#";
+            let str = "0123456789abcdef";
+            for (let j = 0; j < 6; j++) {
+                let colnum = Math.round(Math.random() * 15);
+                color += str[colnum];
+            }
+            //获取以上随机数赋给对应的属性
+            oBBs[i].style.width = num + "px";  //泡泡的宽
+            oBBs[i].style.height = num + "px";  // 泡泡的高
+            oBBs[i].style.top = num2 + "px";  //泡泡的top值
+            oBBs[i].style.left = num3 + "px";  //泡泡的left值
+            oBBs[i].style.borderColor = color;  //泡泡的颜色
+            oBBs[i].style.boxShadow = "inset 0px 0px 50px" + color;  //泡泡的内阴影
+            rebound(oBBs[i], num4, num5);  //调用rebound()函数,给泡泡的运动设置边界
+            oBBs[i].onclick = function () {  //点击哪个泡泡,哪个泡泡就消失
+                this.style.display = "none";
+                var mp3Url = "泡泡破裂.mp3";
+                var player = new Audio(mp3Url);
+                player.play(); //播放 mp3这个音频对象
+            }
+        }
+ 
+    }
+    Bubble(30); //调用创建泡泡的函数,并传入实参
+    function rebound(obj, x, y) {
+        let speedX = x; //速度x,即向右运动
+        let speedY = y; //速度y,即向左运动
+        setInterval(function () {  //启用定时器,让泡泡一直运动
+            obj.style.left = obj.offsetLeft + speedX + "px"; //每50毫秒运动的left距离
+            obj.style.top = obj.offsetTop + speedY + "px"; //每50毫秒运动的top距离
+            //边界条件
+            if (obj.offsetLeft <= 0 || obj.offsetLeft >= innerWidth - obj.offsetWidth) {
+                //如果泡泡的左外边框到浏览器左内边框的距离小于0,即碰到左边界时
+                //或者泡泡的左外边框到浏览器左内边框的距离大于等于浏览器的宽-泡泡自身的宽度时,即碰到右边界时
+                speedX *= -1;  //x反向,即碰到左右边界时,泡泡反弹的方向
+                //防止泡泡触边界抖动
+                if (obj.offsetLeft <= 0) {  //碰到左边界时
+                    obj.style.left = obj.offsetLeft + 8 + "px"; //泡泡的左外边框到浏览器左内边框的距离 + 8
+                } else if (obj.offsetLeft >= innerWidth - obj.offsetWidth) {
+                    obj.style.left = obj.offsetLeft - 8 + "px";
+                }
+            }
+            if (obj.offsetTop <= 0 || obj.offsetTop >= innerHeight - obj.offsetHeight) {
+                speedY *= -1;
+                //防止泡泡触边界抖动
+                if (obj.offsetTop <= 0) {
+                    obj.style.top = obj.offsetTop + 8 + "px";
+                } else if (obj.offsetTop >= innerHeight - obj.offsetHeight) {
+                    obj.style.top = obj.offsetTop - 8 + "px";
+                }
+ 
+            }
+        }, 50);
+    }
+</script>

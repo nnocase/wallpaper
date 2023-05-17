@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>时钟</title>
+    <link rel="时钟" href="clock.png" type="image/x-icon">
+	<style>
+        body {
+            background: #222222;
+            font-family: sans-serif;
+        }
+
+        #clock {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #digits {
+            width: 40%px;
+            height: 20%px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            color: #222222;
+            font-size: 8em;
+            font-weight: bold;
+            border-radius: 20px;
+            box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.75);
+        }
+
+        span {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+	<div id="clock">
+		<div id="digits">
+			<span id="hour"></span>:
+			<span id="minute"></span>:
+			<span id="second"></span>
+		</div>
+	</div>
+    
+</body>
+<script>
+    const hoursEl = document.getElementById('hour');
+    const minutesEl = document.getElementById('minute');
+    const secondsEl = document.getElementById('second');
+    const digit = document.getElementById('clock')
+    digit.style.display = 'none'
+    var curShowTimeSeconds = 0;
+    window.onload = function(){
+        curShowTimeSeconds = getCurrentShowTimeSeconds();
+
+        setInterval(function(){
+            render()
+            update()
+        }, 980)
+    }
+        
+    function update(){
+        var nextShowTimeSeconds = getCurrentShowTimeSeconds();
+        var nextHour = parseInt(nextShowTimeSeconds/3600);
+        var nextMinute = parseInt((nextShowTimeSeconds - nextHour*3600)/60);
+        var nextSecond = nextShowTimeSeconds%60;
+        
+        var curHour = parseInt(curShowTimeSeconds/3600);
+        var curMinute = parseInt((curShowTimeSeconds - curHour*3600)/60);
+        var curSecond = curShowTimeSeconds%60;
+
+        if(nextSecond != curSecond){
+            curShowTimeSeconds = nextShowTimeSeconds;
+        }
+    }
+
+    function getCurrentShowTimeSeconds(){
+        var curTime = new Date();
+        var ret = curTime.getHours()*3600 + curTime.getMinutes()*60 + curTime.getSeconds();
+        return ret;
+    }
+
+    function render(){
+        digit.style.display = 'flex'
+        var hour = parseInt(curShowTimeSeconds/3600);
+        var minute = parseInt((curShowTimeSeconds - hour*3600)/60);
+        var second = curShowTimeSeconds%60;
+
+        hoursEl.innerHTML = formatTime(hour);
+        minutesEl.innerHTML = formatTime(minute);
+        secondsEl.innerHTML = formatTime(second);
+    }
+
+    const formatTime = (time) => {
+        return time < 10 ? (`0${time}`) : time;
+    };
+</script>
+</html>

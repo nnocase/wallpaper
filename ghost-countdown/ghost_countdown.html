@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="ghost.png" />
+    <title>幽灵倒计时</title>
+    <style>
+        html, body{
+            border: none;
+            overflow: hidden;
+            height: 100%;
+        }
+        body{
+            background-color: black;
+        }
+        @font-face {
+            font-family: DigitalNumbers;
+            src: url(DigitalNumbers.ttf);
+        }
+        #ghost-countdown{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 6em;
+            font-weight: bold;
+            font-family: DigitalNumbers, sans-serif;
+            /* font-style: oblique 15deg; */
+            color: khaki;
+            transform: skewX(-2deg);
+            color:transparent;  /*设置文字颜色透明*/
+		    text-shadow: 0 0px 10px khaki;  /*设置文字阴影*/
+        }
+    </style>
+</head>
+<body>
+    <div id="ghost-countdown"></div>
+</body>
+<script>
+    var cookieRender = (function(){
+        //设置，expires过期时间，path路径，domain当前的一个域
+        function setValue(options){
+            var _default = {
+                name: null,
+                value: null,
+                expires: new Date(new Date().getTime() + (1000 * 60 * 60 * 24)),
+                path: '/',
+                domain: ''
+            };
+            for (var key in options) {
+                if(options.hasOwnProperty(key)){
+                    _default[key] = options[key];
+                }
+            }
+            document.cookie = _default.name + "=" + escape(_default.value) + 
+                ";expires=" + _default.expires.toGMTString() + 
+                ";path=" + _default.path + ";domain=" + _default.domain;
+        }
+        //获取，正则匹配
+        function getValue(name){
+            var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+            if (arr != null) {
+                return unescape(arr[2]);
+            }
+            return null;
+        }
+        //删除:原理就是让过期时间变成一个今天日期之前的
+        function removeValue(options){
+            var _default = {
+                name: null,
+                path: '/',
+                domain: ''
+            };
+            for (var key in options) {
+                if(options.hasOwnProperty(key)){
+                    _default[key] = options[key];
+                }
+            }
+            if (getValue(_default.name)) {
+                document.cookie = _default.name + "= ; path=" + _default.path  +"; domain="
+                + _default.domain + "; expires=Fri, 02-Jan-1970 00:00:00 GMT";
+            }
+        }
+    
+        return {
+            set: setValue,
+            get: getValue,
+            remove: removeValue
+        }
+    })();
+
+    cookieRender.set({
+		name: 'hour',
+		value: 1200
+	});
+	console.log(cookieRender.get("hour"));
+
+    var preset = new Date(Date.now() + 1200 * 60 * 60 * 1000)
+    // preset.setHours(1200)
+    // preset.setMinutes(0)
+    // preset.setSeconds(0)
+    console.log(preset)
+    var countdown = document.getElementById('ghost-countdown')
+
+    init();
+    function init(){
+        setInterval(animation, 1000, countdown);
+    }
+    // date.setHours(0)
+    // date.setMinutes(0)
+    // date.setSeconds(0)
+    function animation(elem){
+        if(!preset) return;
+        var date = new Date();
+        var time = preset - date;
+        if(time < 0){
+            preset = null;
+            return;
+        }
+        time = time / 1000;
+        var h= time >= 3600 ? parseInt(time / 3600) : 00;
+        var m = time >= 60 ? parseInt((time -h * 3600) / 60) : 00;
+        var s = parseInt(time - h * 3600 - m * 60);
+        if (h < 1000){
+            h = '0' + h
+        }else if (h < 100){
+            h = '00' + h
+        }else if (h < 10){
+            h = '000' + h
+        }
+        if (m < 10){
+            m = '0' + m
+        }
+        if (s < 10){
+            s = '0' + s
+        }
+        elem.innerHTML= h + " "+ m + " " + s;
+    }
+</script>
+</html>
