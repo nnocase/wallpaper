@@ -14,27 +14,54 @@
     }
 
     body {
-        background: url(win10.jpg);
+        background: url(WindowsXP.jpeg);
         background-position: center center;
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
     }
+    #full-screen {
+        cursor: pointer;
+        float: right;
+        color:rgba(255,255,255,0.0);
+        margin-right: 10px;
+        font-size: 24px;
+    }
+    #full-screen:hover {
+        font-weight: bold;
+        color: black;
+    }
 </style>
 </head>
 
 <body onload="Demo()">
-<script src="Bubbles.js"></script>
-<script>
-var MAX = 10;
-var i = 0;
+    <span onclick="openFullscreen()" id="full-screen" title="full-screen">[&nbsp;&nbsp;]</button>
+    <script src="Bubbles.js"></script>
+    <script>
+        var MAX = 10;
+        var i = 0;  
 
-function Demo(){
-	CreateBubble();
+        function Demo(){
+            CreateBubble();
 
-	if(++i < MAX)
-		setTimeout(Demo, 1000);
-}
-</script>
+            if(++i < MAX)
+                setTimeout(Demo, 1000);
+        }
+
+        /* 获取 documentElement (<html>) 以全屏显示页面 */
+        var elem = document.documentElement;
+        /* 全屏查看 */
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari 和 Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+        }
+    </script>
 </body>
 </html>

@@ -41,11 +41,25 @@
             background-image: url(heart.png);
             cursor: pointer;
         }
+
+        #full-screen {
+            cursor: pointer;
+            float: right;
+            border: none;
+            background-color: rgba(255,255,255,0.0);
+            color:rgba(255,255,255,0.0);
+            margin: 20px;
+            font-size: 24px;
+        }
+        #full-screen:hover {
+            font-weight: bold;
+            color: black;
+        }
     </style>
 </head>
  
 <body>
- 
+    <button onclick="openFullscreen()" id="full-screen" title="full-screen">[&nbsp;&nbsp;]</button>
 </body>
  
 </html>
@@ -119,5 +133,20 @@
  
             }
         }, 50);
+    }
+
+    /* 获取 documentElement (<html>) 以全屏显示页面 */
+    var elem = document.documentElement;
+    /* 全屏查看 */
+    function openFullscreen() {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari 和 Opera */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+            elem.msRequestFullscreen();
+        }
     }
 </script>
